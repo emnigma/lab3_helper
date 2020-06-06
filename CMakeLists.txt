@@ -1,6 +1,12 @@
-cmake_minimum_required(VERSION 3.16)
-project(habr)
+cmake_minimum_required(VERSION 3.15)
+project(lab3_helper)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(habr main.cpp node.h tree.h pointer.h)
+include_directories(.)
+
+add_executable(lab3_helper
+        main.cpp
+        node.h
+        pointer.h
+        tree.h)

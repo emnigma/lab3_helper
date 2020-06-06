@@ -368,6 +368,22 @@ public:
         return parent;
     }
 
+    void trav_show() {
+        this->traverse(root);
+    }
+
+    void traverse(node *current) { //по текущему узлу получить следующий
+        if (!current)
+            return;
+
+        traverse(current->first); //Рекурсивная функция для левого поддерева
+
+        cout << current->key[0] << ' ';
+
+        traverse(current->second); //Рекурсивная функция для среднего поддерева
+        traverse(current->third); //Рекурсивная функция для правого поддерева
+    }
+
     ~tree()
     {
         delete root;

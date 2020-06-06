@@ -16,11 +16,14 @@ int main() {
     tree A('A', f);
     A.Show();
 */
-    std::vector<int> f = {1, 2, 3, 1, 2, 3, 7, 7};
+    std::vector<int> f = {1, 2, 4, 5, 7, 8, 9};
     tree A('A', f);
 
-    A.removeByIndex(3);
+//    A.removeByIndex(3);
     A.Show();
+
+    A.trav_show();
+
 
     return 0;
 }
