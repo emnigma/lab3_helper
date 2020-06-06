@@ -368,20 +368,73 @@ public:
         return parent;
     }
 
-    void trav_show() {
-        this->traverse(root);
+    std::vector<int> get_variety() {
+        std::vector<int> elems;
+        elems.reserve(this->n);
+        traverse(root, elems);
+        return elems;
     }
 
-    void traverse(node *current) { //по текущему узлу получить следующий
+    void traverse(node *current, std::vector<int> &res) { //по текущему узлу получить следующий
         if (!current)
             return;
 
-        traverse(current->first); //Рекурсивная функция для левого поддерева
+        traverse(current->first, res); //Рекурсивная функция для левого поддерева
 
-        cout << current->key[0] << ' ';
+//        cout << current->key[0] << ' ';
+        res.push_back(current->key[0]);
 
-        traverse(current->second); //Рекурсивная функция для среднего поддерева
-        traverse(current->third); //Рекурсивная функция для правого поддерева
+        traverse(current->second, res); //Рекурсивная функция для среднего поддерева
+        traverse(current->third, res); //Рекурсивная функция для правого поддерева
+    }
+
+    static tree AND (tree &a, tree &b) {
+        std::vector<int> v;
+        std::set_intersection(
+                a.get_variety().begin(),
+                a.get_variety().end(),
+                b.get_variety().begin(),
+                b.get_variety().end(),
+                std::back_inserter(v)
+        );
+        return tree('&', v);
+    }
+
+    static tree MINUS (tree &a, tree &b) {
+        std::vector<int> v;
+        std::set_difference(
+                a.get_variety().begin(),
+                a.get_variety().end(),
+                b.get_variety().begin(),
+                b.get_variety().end(),
+                std::back_inserter(v)
+        );
+
+        return tree('\\', v);
+    }
+
+    static tree XOR (tree &a, tree &b) {
+        std::vector<int> v;
+        std::set_symmetric_difference(
+                a.get_variety().begin(),
+                a.get_variety().end(),
+                b.get_variety().begin(),
+                b.get_variety().end(),
+                std::back_inserter(v)
+        );
+        return tree('+', v);
+    }
+
+    static tree OR (tree &a, tree &b) {
+        std::vector<int> v;
+        std::set_union(
+                a.get_variety().begin(),
+                a.get_variety().end(),
+                b.get_variety().begin(),
+                b.get_variety().end(),
+                std::back_inserter(v)
+        );
+        return tree('|', v);
     }
 
     static tree SUBST(int pos, tree &a, tree &b) { //говнокод
