@@ -394,8 +394,16 @@ public:
         return tree('S', v);
     };
 
-    static tree MERGE() {
-
+    static tree MERGE(tree &a, tree &b) { //ГОВНОКОООД
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+        std::sort(v1.begin(), v1.end());
+        std::sort(v2.begin(), v2.end());
+        std::vector<int> v(v1.size() + v2.size());
+        std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), v.begin());
+        return tree('M', v);
     }
 
     ~tree()

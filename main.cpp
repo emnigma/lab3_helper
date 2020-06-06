@@ -21,5 +21,8 @@ int main() {
     auto C = tree::SUBST(3, A, B);
     C.Show();
 
+    auto D = tree::MERGE(A, B);
+    D.Show();
+
     return 0;
 }
