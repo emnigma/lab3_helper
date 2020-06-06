@@ -69,7 +69,7 @@ private:
         fourth = nullptr;
         parent = nullptr;
         size = 1;
-    }
+    } //sequel without prequel
 
     bool is_leaf() { // Является ли узел листом; проверка используется при вставке и удалении.
         return (first == nullptr) && (second == nullptr) && (third == nullptr);
@@ -92,14 +92,7 @@ public:
         }
         std::cout << '\n';
     }
-    friend node *split(node *item); // Метод для разделение вершины при переполнении;
-    friend node *insert(node *p, int k); // Вставка в дерево;
-    friend node *search(node *p, int k); // Поиск в дереве;
-    friend node *search_min(node *p); // Поиск минимального элемента в поддереве;
-    friend node *merge(node *leaf); // Слияние используется при удалении;
-    friend node *redistribute(node *leaf); // Перераспределение также используется при удалении;
-    friend node *fix(node *leaf); // Используется после удаления для возвращения свойств дереву (использует merge или redistribute)
-    friend node *remove(node *p, int k); // Собственно, из названия понятно;
+
 };
 
 

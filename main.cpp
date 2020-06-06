@@ -20,7 +20,9 @@ int main() {
     tree A('A', f);
 
     A.removeByIndex(3);
+    A.Show();
 
+    A.removeByIndex(0);
     A.Show();
 
     return 0;

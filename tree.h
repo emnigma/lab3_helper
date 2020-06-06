@@ -26,7 +26,6 @@ private:
 
 public:
     tree(); //Конструктор по уполчанию
-    tree(char c); //Конструктор с обозначением названия множества
     tree(char c, std::vector<int> &keys); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
     tree(const tree&); //Конструктор копии
 
@@ -50,8 +49,8 @@ public:
             keys.erase(keys.begin() + index);
         }
         else {
-            keys.erase(keys.begin() + index);
             remove(this->getElementByKey(keys[index]), keys[index]);
+            keys.erase(keys.begin() + index);
         }
     } //для удаления элемента из последовательности
 
@@ -378,10 +377,11 @@ public:
 };
 
 
-tree::tree() : S('0'), n(0), root(nullptr), A(new int[N]) //DO NOT USE(for now)
+tree::tree() : S('0'), n(0), root(nullptr), A(new int[N])
 {
     for (int i = 0; i < N; ++i)
         A[i] = 0;
+    keys.reserve(N);
 }
 
 tree::tree(char c, std::vector<int> &keys) : S(c), root(nullptr) {
@@ -400,27 +400,13 @@ tree::tree(char c, std::vector<int> &keys) : S(c), root(nullptr) {
     }
 }
 
-tree::tree(char c) : S(c), root(nullptr) //DO NOT USE
-{
-    cout << "Insert number of elements in sequence " << S << endl;
-    cin >> n;
-    A = new int[n];
-    for (int i = 0; i < n; ++i)
-    {
-        cout << "(" << i << ") ";
-        cin >> A[i];
-//        root = insert(root, A[i], &A[i]);
-        root = insert(root, A[i]);
-    }
-}
-
-tree::tree(const tree & Q) : n(Q.n), S(Q.S), A(new int[N]), root(nullptr) //DO NOT USE
+tree::tree(const tree & Q) : n(Q.n), S(Q.S), A(new int[N]), root(nullptr)
 {
     for (int i = 0; i < n; i++)
         A[i] = Q.A[i];
     for (int i = 0; i < n; ++i)
-//        root = insert(root, A[i], &A[i]);
         root = insert(root, A[i]);
+    keys.assign(Q.keys.begin(), Q.keys.end());
 }
 
 void tree::Show()
