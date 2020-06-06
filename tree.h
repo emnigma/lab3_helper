@@ -7,6 +7,8 @@
 
 #include "node.h"
 #include <vector>
+#include <algorithm>
+#include "pointer.h"
 
 using std::cout, std::cin, std::endl;
 
@@ -15,24 +17,40 @@ class tree
 private:
     node *root;
     char S; //Название множества
-    int *A; //Массив указателей на ключи
+    std::vector<int> keys;
     int n; //Мощность множества
     static const int N;
 
 
 public:
     tree(); //Конструктор по уполчанию
-    tree(char c); //Конструктор с обозначением названия множества
-    tree(char c, std::vector<int> keys); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
+    tree(char c, std::vector<int> &data); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
     tree(const tree&); //Конструктор копии
 
     node *getElementByKey(int k) {
         return search(this->root, k);
     }
 
-    void removeByKey(int k) {
-        remove(this->getElementByKey(k), k);
+    bool hasDuplicates(int k) {
+        int count = 0;
+        for (auto i : keys) {
+            if (i == k)
+                count++;
+            if (i == k && count > 1)
+                return true;
+        }
+        return false;
     }
+
+    void removeByIndex(int index) {
+        if (this->hasDuplicates(keys[index])) {
+            keys.erase(keys.begin() + index);
+        }
+        else {
+            remove(this->getElementByKey(keys[index]), keys[index]);
+            keys.erase(keys.begin() + index);
+        }
+    } //для удаления элемента из последовательности
 
     void Show();  //Вывод дерева на экран
     void Display(node *p, int &lvl);
@@ -81,20 +99,18 @@ public:
         }
     }
 
+    void insert(int k) {
+        if (this->getElementByKey(k) == nullptr) {
+            this->insert(root, k);
+        }
+        keys.push_back(k);
+    } //удобный
+
     node *insert(node *p, int k) { // вставка ключа k в дерево с корнем p; всегда возвращаем корень дерева, т.к. он может меняться
-        try {
-            if (this->getElementByKey(k) != nullptr) { //if element already exists
 
-            }
+        if (!p) {
+            return new node(k); // если дерево пусто, то создаем первую 2-3-вершину (корень)
         }
-        catch(...) {
-            std::cout << "OBYOB AAAAAAAAAAA";
-        }
-
-        //чтобы в дереве не было дубликатов узел будет вставляться в него только если его там нет
-        //если он есть в дереве, то пихнем указатель на него в массив указателей и вернем указатель на него же
-
-        if (!p) return new node(k); // если дерево пусто, то создаем первую 2-3-вершину (корень)
 
         if (p->is_leaf()) p->insert_to_node(k);
         else if (k <= p->key[0]) insert(p->first, k);
@@ -102,7 +118,7 @@ public:
         else insert(p->third, k);
 
         return split(p);
-    }
+    } //внутренний
 
     node *search(node *p, int k) { // Поиск ключа k в 2-3 дереве с корнем p.
         if (!p) return nullptr;
@@ -137,7 +153,7 @@ public:
 
         item->remove_from_node(k); // И удаляем требуемый ключ из листа
         return fix(item); // Вызываем функцию для восстановления свойств дерева.
-    }
+    } //для удаления из дерева
 
     node *fix(node *leaf) {
         if (leaf->size == 0 && leaf->parent == nullptr) { // Случай 0, когда удаляем единственный ключ в дереве
@@ -359,59 +375,44 @@ public:
 };
 
 
-tree::tree() : S('0'), n(0), root(nullptr), A(new int[N])
+tree::tree() : S('0'), n(0), root(nullptr)
 {
-    for (int i = 0; i < N; ++i)
-        A[i] = 0;
+    keys.reserve(N);
 }
 
-tree::tree(char c, std::vector<int> keys) : S(c), root(nullptr) {
-    n = keys.size();
+tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
+    n = 0;
     // делаем один в один коструктор из инпута ниже, только по человечески из вектора
-    A = new int[n];
-    for (int i = 0; i < n; ++i)
+    for (auto item : data)
     {
-        cout << "(" << i << ") ";
-        A[i] = keys[i];
-        cout << keys[i] << ", ";
-//        root = insert(root, A[i], &A[i]);
-        root = insert(root, A[i]);
+        if (this->getElementByKey(item) == nullptr) {
+            root = insert(root, item);
+            n++;
+        }
+//        cout << "(" << i << ") ";
+//        cout << keys[i] << ", ";
+        this->keys.push_back(item);
+
     }
 }
 
-tree::tree(char c) : S(c), root(nullptr)
+tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 {
-    cout << "Insert number of elements in sequence " << S << endl;
-    cin >> n;
-    A = new int[n];
-    for (int i = 0; i < n; ++i)
-    {
-        cout << "(" << i << ") ";
-        cin >> A[i];
-//        root = insert(root, A[i], &A[i]);
-        root = insert(root, A[i]);
-    }
-}
-
-tree::tree(const tree & Q) : n(Q.n), S(Q.S), A(new int[N]), root(nullptr)
-{
-    for (int i = 0; i < n; i++)
-        A[i] = Q.A[i];
-    for (int i = 0; i < n; ++i)
-//        root = insert(root, A[i], &A[i]);
-        root = insert(root, A[i]);
+    for (auto key : keys)
+        root = insert(root, key);
+    keys.assign(Q.keys.begin(), Q.keys.end());
 }
 
 void tree::Show()
 {
     if (!root)
-        cout << "Дерево пустое";
+        cout << "Tree is empty";
     else
     {
         int lvl = 0;
         cout << S << " = [";
-        for (int i = 0; i < n; i++)
-            cout << A[i] << ' ';
+        for (auto i: keys)
+            cout << i << ' ';
         cout << ']' << endl;
         Display(root, lvl);
     }
