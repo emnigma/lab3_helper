@@ -19,15 +19,16 @@ private:
     int n; //Мощность множества
     static const int N;
 
-    node *getElementByKey(int k) {
-        return search(this->root, k);
-    }
 
 public:
     tree(); //Конструктор по уполчанию
     tree(char c); //Конструктор с обозначением названия множества
     tree(char c, std::vector<int> keys); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
     tree(const tree&); //Конструктор копии
+
+    node *getElementByKey(int k) {
+        return search(this->root, k);
+    }
 
     void removeByKey(int k) {
         remove(this->getElementByKey(k), k);
@@ -81,6 +82,18 @@ public:
     }
 
     node *insert(node *p, int k) { // вставка ключа k в дерево с корнем p; всегда возвращаем корень дерева, т.к. он может меняться
+        try {
+            if (this->getElementByKey(k) != nullptr) { //if element already exists
+
+            }
+        }
+        catch(...) {
+            std::cout << "OBYOB AAAAAAAAAAA";
+        }
+
+        //чтобы в дереве не было дубликатов узел будет вставляться в него только если его там нет
+        //если он есть в дереве, то пихнем указатель на него в массив указателей и вернем указатель на него же
+
         if (!p) return new node(k); // если дерево пусто, то создаем первую 2-3-вершину (корень)
 
         if (p->is_leaf()) p->insert_to_node(k);
