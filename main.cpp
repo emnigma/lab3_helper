@@ -22,6 +22,5 @@ int main() {
     A.removeByIndex(3);
     A.Show();
 
-
     return 0;
 }

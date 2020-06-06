@@ -377,35 +377,36 @@ public:
 
 tree::tree() : S('0'), n(0), root(nullptr)
 {
-
     keys.reserve(N);
 }
 
 tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
-    n = data.size();
+    n = 0;
     // делаем один в один коструктор из инпута ниже, только по человечески из вектора
-    for (int i = 0; i < n; ++i)
+    for (auto item : data)
     {
-        if (this->getElementByKey(data[i]) == nullptr)
-            root = insert(root, data[i]);
+        if (this->getElementByKey(item) == nullptr) {
+            root = insert(root, item);
+            n++;
+        }
 //        cout << "(" << i << ") ";
 //        cout << keys[i] << ", ";
-        this->keys.push_back(data[i]);
+        this->keys.push_back(item);
 
     }
 }
 
 tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 {
-    for (int i = 0; i < n; ++i)
-        root = insert(root, keys[i]);
+    for (auto key : keys)
+        root = insert(root, key);
     keys.assign(Q.keys.begin(), Q.keys.end());
 }
 
 void tree::Show()
 {
     if (!root)
-        cout << "Дерево пустое";
+        cout << "Tree is empty";
     else
     {
         int lvl = 0;
