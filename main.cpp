@@ -18,7 +18,11 @@ int main() {
 */
     std::vector<int> f = {1, 2, 3};
     tree A('A', f);
-    pointer<node> p(A.getElementByKey(1));
+    std::vector<pointer<node>> keys;
+    keys.emplace_back(1, A.getElementByKey(1));
+    keys.emplace_back(2, A.getElementByKey(2));
+    keys.emplace_back(3, A.getElementByKey(3));
+    keys.emplace_back(1, A.getElementByKey(1));
 
     return 0;
 }

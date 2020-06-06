@@ -7,6 +7,7 @@
 
 #include "node.h"
 #include <vector>
+#include "pointer.h"
 
 using std::cout, std::cin, std::endl;
 
@@ -16,6 +17,7 @@ private:
     node *root;
     char S; //Название множества
     int *A; //Массив указателей на ключи
+    std::vector<pointer<node>> keys;
     int n; //Мощность множества
     static const int N;
 
