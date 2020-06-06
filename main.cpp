@@ -27,5 +27,11 @@ int main() {
     auto E = tree::EXCL(A, B);
     E.Show();
 
+//    auto F(A);//почему-то не работает, если не почините, то удалите
+
+    tree F('F', f);
+    F.ERASE(3, 5);
+    F.Show();
+
     return 0;
 }

@@ -385,6 +385,9 @@ public:
     }
 
     static tree SUBST(int pos, tree &a, tree &b) { //говнокод
+        if (pos < 0 || pos > a.keys.size()) {
+            throw std::invalid_argument("pos is out of vector borders");
+        }
         std::vector<int> v1;
         v1.assign(a.keys.begin(), a.keys.end());
         std::vector<int> v2;
@@ -406,6 +409,15 @@ public:
         return tree('M', v);
     }
 
+    void ERASE(int p1, int p2) { //вообще не говнокод!
+        if (p1 < 0 || p2 > this->keys.size() || p1 > p2) {
+            throw std::invalid_argument("check borders");
+        }
+        for (int i = p1; i <= p2; i++) {
+            this->removeByIndex(i);
+        }
+    }
+
     static tree EXCL(tree &a, tree &b) { //ГОВНОКОООД
         std::vector<int> v1;
         v1.assign(a.keys.begin(), a.keys.end());
@@ -422,7 +434,6 @@ public:
 
         return a;
     }
-
     ~tree()
     {
         delete root;
@@ -454,8 +465,9 @@ tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
 tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 {
     for (auto key : keys)
-        root = insert(root, key);
+        this->insert(key);
     keys.assign(Q.keys.begin(), Q.keys.end());
+
 }
 
 void tree::Show()
