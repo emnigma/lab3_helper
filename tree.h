@@ -406,6 +406,23 @@ public:
         return tree('M', v);
     }
 
+    static tree EXCL(tree &a, tree &b) { //ГОВНОКОООД
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+
+        if (std::search(v1.begin(), v1.end(), v2.begin(), v2.end()) != v1.end()) {
+            auto it = std::search(v1.begin(), v1.end(), v2.begin(), v2.end());
+            std::vector<int> v(v1);
+            int offset = it - v1.begin();
+            v.erase(v.begin() + offset, v.begin() + offset + v2.size());
+            return tree('E', v);
+        }
+
+        return a;
+    }
+
     ~tree()
     {
         delete root;
