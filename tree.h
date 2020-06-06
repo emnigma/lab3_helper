@@ -384,6 +384,20 @@ public:
         traverse(current->third); //Рекурсивная функция для правого поддерева
     }
 
+    static tree SUBST(int pos, tree &a, tree &b) { //говнокод
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+        std::vector<int> v(v1);
+        v.insert(v.begin() + pos, v2.begin(), v2.end());
+        return tree('S', v);
+    };
+
+    static tree MERGE() {
+
+    }
+
     ~tree()
     {
         delete root;

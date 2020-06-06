@@ -6,24 +6,20 @@
 const int tree::N = 100;
 
 int main() {
-/*
+
     setlocale(LC_ALL, "Russian");
     srand(80086);
 
-    std::vector<int> f = {1, 1, 1, 1, 2, 1, 1, 1, 1, 4};
-    std::vector<int> s = {1, 2, 5, 7, 8, 9, 10};
+    std::vector<int> f = {1, 1, 1, 1, 1, 1, 1};
+    std::vector<int> s = {3, 3, 3};
 
     tree A('A', f);
     A.Show();
-*/
-    std::vector<int> f = {1, 2, 4, 5, 7, 8, 9};
-    tree A('A', f);
+    tree B('B', s);
+    B.Show();
 
-//    A.removeByIndex(3);
-    A.Show();
-
-    A.trav_show();
-
+    auto C = tree::SUBST(3, A, B);
+    C.Show();
 
     return 0;
 }
