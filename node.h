@@ -16,6 +16,8 @@ private:
     node *fourth;  // kye[2] <= *fourth.
     node *parent; //Указатель на родителя нужен для того, потому что адрес корня может меняться при удалении
 
+    int used;
+
     bool find(int k) { // Этот метод возвращает true, если ключ k находится в вершине, иначе false.
         for (int i = 0; i < size; ++i)
             if (key[i] == k) return true;
@@ -78,14 +80,16 @@ private:
 public:
     // Создавать всегда будем вершину только с одним ключом
     node(int k): size(1), key{k, 0, 0}, first(nullptr), second(nullptr),
-                 third(nullptr), fourth(nullptr), parent(nullptr) {}
+                 third(nullptr), fourth(nullptr), parent(nullptr), used(false) {}
 
     node (int k, node *first_, node *second_, node *third_, node *fourth_, node *parent_):
             size(1), key{k, 0, 0}, first(first_), second(second_),
-            third(third_), fourth(fourth_), parent(parent_) {}
+            third(third_), fourth(fourth_), parent(parent_), used(false) {}
+
     int* keys() {
         return this->key;
     }
+
     void print_keys() {
         for (auto i: key) {
             std::cout << i << ' ';

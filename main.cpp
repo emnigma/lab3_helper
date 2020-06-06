@@ -6,21 +6,32 @@
 const int tree::N = 100;
 
 int main() {
-/*
+
     setlocale(LC_ALL, "Russian");
     srand(80086);
 
-    std::vector<int> f = {1, 1, 1, 1, 2, 1, 1, 1, 1, 4};
-    std::vector<int> s = {1, 2, 5, 7, 8, 9, 10};
+    std::vector<int> f = {1, 1, 2, 2, 2, 1, 1, 1};
+    std::vector<int> s = {2, 2};
 
     tree A('A', f);
     A.Show();
-*/
-    std::vector<int> f = {1, 2, 3, 1, 2, 3, 7, 7};
-    tree A('A', f);
+    tree B('B', s);
+    B.Show();
 
-    A.removeByIndex(3);
-    A.Show();
+    auto C = tree::SUBST(3, A, B);
+    C.Show();
+
+    auto D = tree::MERGE(A, B);
+    D.Show();
+
+    auto E = tree::EXCL(A, B);
+    E.Show();
+
+//    auto F(A);//почему-то не работает, если не почините, то удалите
+
+    tree F('F', f);
+    F.ERASE(3, 5);
+    F.Show();
 
     return 0;
 }

@@ -368,6 +368,72 @@ public:
         return parent;
     }
 
+    void trav_show() {
+        this->traverse(root);
+    }
+
+    void traverse(node *current) { //по текущему узлу получить следующий
+        if (!current)
+            return;
+
+        traverse(current->first); //Рекурсивная функция для левого поддерева
+
+        cout << current->key[0] << ' ';
+
+        traverse(current->second); //Рекурсивная функция для среднего поддерева
+        traverse(current->third); //Рекурсивная функция для правого поддерева
+    }
+
+    static tree SUBST(int pos, tree &a, tree &b) { //говнокод
+        if (pos < 0 || pos > a.keys.size()) {
+            throw std::invalid_argument("pos is out of vector borders");
+        }
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+        std::vector<int> v(v1);
+        v.insert(v.begin() + pos, v2.begin(), v2.end());
+        return tree('S', v);
+    };
+
+    static tree MERGE(tree &a, tree &b) { //ГОВНОКОООД
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+        std::sort(v1.begin(), v1.end());
+        std::sort(v2.begin(), v2.end());
+        std::vector<int> v(v1.size() + v2.size());
+        std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), v.begin());
+        return tree('M', v);
+    }
+
+    void ERASE(int p1, int p2) { //вообще не говнокод!
+        if (p1 < 0 || p2 > this->keys.size() || p1 > p2) {
+            throw std::invalid_argument("check borders");
+        }
+        for (int i = p1; i <= p2; i++) {
+            this->removeByIndex(i);
+        }
+    }
+
+    static tree EXCL(tree &a, tree &b) { //ГОВНОКОООД
+        std::vector<int> v1;
+        v1.assign(a.keys.begin(), a.keys.end());
+        std::vector<int> v2;
+        v2.assign(b.keys.begin(), b.keys.end());
+
+        if (std::search(v1.begin(), v1.end(), v2.begin(), v2.end()) != v1.end()) {
+            auto it = std::search(v1.begin(), v1.end(), v2.begin(), v2.end());
+            std::vector<int> v(v1);
+            int offset = it - v1.begin();
+            v.erase(v.begin() + offset, v.begin() + offset + v2.size());
+            return tree('E', v);
+        }
+
+        return a;
+    }
     ~tree()
     {
         delete root;
@@ -399,8 +465,9 @@ tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
 tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 {
     for (auto key : keys)
-        root = insert(root, key);
+        this->insert(key);
     keys.assign(Q.keys.begin(), Q.keys.end());
+
 }
 
 void tree::Show()
