@@ -17,8 +17,6 @@ class tree
 private:
     node *root;
     char S; //Название множества
-    int *A; //Массив указателей на ключи
-//    std::vector<pointer<node>> keys;
     std::vector<int> keys;
     int n; //Мощность множества
     static const int N;
@@ -26,7 +24,7 @@ private:
 
 public:
     tree(); //Конструктор по уполчанию
-    tree(char c, std::vector<int> &keys); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
+    tree(char c, std::vector<int> &data); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
     tree(const tree&); //Конструктор копии
 
     node *getElementByKey(int k) {
@@ -377,35 +375,30 @@ public:
 };
 
 
-tree::tree() : S('0'), n(0), root(nullptr), A(new int[N])
+tree::tree() : S('0'), n(0), root(nullptr)
 {
-    for (int i = 0; i < N; ++i)
-        A[i] = 0;
+
     keys.reserve(N);
 }
 
-tree::tree(char c, std::vector<int> &keys) : S(c), root(nullptr) {
-    n = keys.size();
+tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
+    n = data.size();
     // делаем один в один коструктор из инпута ниже, только по человечески из вектора
-    A = new int[n];
     for (int i = 0; i < n; ++i)
     {
-        A[i] = keys[i];
-        if (this->getElementByKey(keys[i]) == nullptr)
-            root = insert(root, A[i]);
+        if (this->getElementByKey(data[i]) == nullptr)
+            root = insert(root, data[i]);
 //        cout << "(" << i << ") ";
 //        cout << keys[i] << ", ";
-        this->keys.push_back(keys[i]);
+        this->keys.push_back(data[i]);
 
     }
 }
 
-tree::tree(const tree & Q) : n(Q.n), S(Q.S), A(new int[N]), root(nullptr)
+tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 {
-    for (int i = 0; i < n; i++)
-        A[i] = Q.A[i];
     for (int i = 0; i < n; ++i)
-        root = insert(root, A[i]);
+        root = insert(root, keys[i]);
     keys.assign(Q.keys.begin(), Q.keys.end());
 }
 
@@ -417,10 +410,6 @@ void tree::Show()
     {
         int lvl = 0;
         cout << S << " = [";
-        for (int i = 0; i < n; i++)
-            cout << A[i] << ' ';
-        cout << ']' << endl;
-        cout << "K" << " = [";
         for (auto i: keys)
             cout << i << ' ';
         cout << ']' << endl;
