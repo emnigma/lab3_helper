@@ -7,9 +7,9 @@
 
 template <class T> struct pointer {
     const T* p;
-    int data; // нужно, чтобы понимать указатель на какой из элементов мы имеем ввиду
+    int &data; // нужно, чтобы понимать указатель на какой из элементов мы имеем ввиду
 
-    pointer(int src_data, T* src_p) {
+    pointer(int &src_data, T* src_p) {
         data = src_data;
         p = src_p;
     }

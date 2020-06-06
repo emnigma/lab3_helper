@@ -16,13 +16,12 @@ int main() {
     tree A('A', f);
     A.Show();
 */
-    std::vector<int> f = {1, 2, 3};
+    std::vector<int> f = {1, 2, 3, 1, 2, 3, 7, 7};
     tree A('A', f);
-    std::vector<pointer<node>> keys;
-    keys.emplace_back(1, A.getElementByKey(1));
-    keys.emplace_back(2, A.getElementByKey(2));
-    keys.emplace_back(3, A.getElementByKey(3));
-    keys.emplace_back(1, A.getElementByKey(1));
+
+    A.removeByIndex(3);
+
+    A.Show();
 
     return 0;
 }
