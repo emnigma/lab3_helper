@@ -127,7 +127,6 @@ public:
         else if (k < p->key[0]) return search(p->first, k);
         else if ((p->size == 2) && (k < p->key[1]) || (p->size == 1)) return search(p->second, k);
         else if (p->size == 2) return search(p->third, k);
-        else throw std::exception();
     }
 
     node *search_min(node *p) { // Поиск узла с минимальным элементов в 2-3-дереве с корнем p.
@@ -382,7 +381,15 @@ public:
         traverse(current->first, res); //Рекурсивная функция для левого поддерева
 
 //        cout << current->key[0] << ' ';
-        res.push_back(current->key[0]);
+        if (!current->is_leaf())
+            res.push_back(current->key[0]);
+        else {
+            for (auto i: current->key) {
+                if (i != -1)
+                    res.push_back(i);
+            }
+        }
+
 
         traverse(current->second, res); //Рекурсивная функция для среднего поддерева
         traverse(current->third, res); //Рекурсивная функция для правого поддерева
@@ -390,23 +397,26 @@ public:
 
     static tree AND (tree &a, tree &b) {
         std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
         std::set_intersection(
-                a.get_variety().begin(),
-                a.get_variety().end(),
-                b.get_variety().begin(),
-                b.get_variety().end(),
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
                 std::back_inserter(v)
         );
+
         return tree('&', v);
     }
 
     static tree MINUS (tree &a, tree &b) {
         std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
         std::set_difference(
-                a.get_variety().begin(),
-                a.get_variety().end(),
-                b.get_variety().begin(),
-                b.get_variety().end(),
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
                 std::back_inserter(v)
         );
 
@@ -415,25 +425,29 @@ public:
 
     static tree XOR (tree &a, tree &b) {
         std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
         std::set_symmetric_difference(
-                a.get_variety().begin(),
-                a.get_variety().end(),
-                b.get_variety().begin(),
-                b.get_variety().end(),
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
                 std::back_inserter(v)
         );
+
         return tree('+', v);
     }
 
     static tree OR (tree &a, tree &b) {
         std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
         std::set_union(
-                a.get_variety().begin(),
-                a.get_variety().end(),
-                b.get_variety().begin(),
-                b.get_variety().end(),
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
                 std::back_inserter(v)
         );
+
         return tree('|', v);
     }
 
@@ -500,18 +514,22 @@ tree::tree() : S('0'), n(0), root(nullptr)
 }
 
 tree::tree(char c, std::vector<int> &data) : S(c), root(nullptr) {
-    n = 0;
-    // делаем один в один коструктор из инпута ниже, только по человечески из вектора
-    for (auto item : data)
-    {
-        if (this->getElementByKey(item) == nullptr) {
-            root = insert(root, item);
-            n++;
-        }
-//        cout << "(" << i << ") ";
-//        cout << keys[i] << ", ";
-        this->keys.push_back(item);
+    if (data.empty()) {
+        tree();
+    }
+    else {
+        n = 0;
+        // делаем один в один коструктор из инпута ниже, только по человечески из вектора
+        for (auto item : data) {
+            if (this->getElementByKey(item) == nullptr) {
+                root = insert(root, item);
+                n++;
+            }
+            //        cout << "(" << i << ") ";
+            //        cout << keys[i] << ", ";
+            this->keys.push_back(item);
 
+        }
     }
 }
 
@@ -526,7 +544,7 @@ tree::tree(const tree & Q) : n(Q.n), S(Q.S), root(nullptr)
 void tree::Show()
 {
     if (!root)
-        cout << "Tree is empty";
+        cout << "Tree is empty\n";
     else
     {
         int lvl = 0;
