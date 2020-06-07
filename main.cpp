@@ -3,7 +3,7 @@
 #include "tree.h"
 #include "pointer.h"
 
-const int UNIVERSUM_SIZE = 16; //for visual debug
+const int UNIVERSUM_SIZE = 26; //for visual debug
 
 const int tree::N = 100;
 
