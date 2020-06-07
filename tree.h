@@ -414,7 +414,7 @@ public:
             throw std::invalid_argument("check borders");
         }
         for (int i = p1; i <= p2; i++) {
-            this->removeByIndex(i);
+            this->removeByIndex(p1);
         }
     }
 
