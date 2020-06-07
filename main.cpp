@@ -18,6 +18,7 @@ int main() {
     tree B('B', s);
     B.Show();
 
+
     auto C = tree::SUBST(3, A, B);
     C.Show();
 
@@ -27,11 +28,13 @@ int main() {
     auto E = tree::EXCL(A, B);
     E.Show();
 
-//    auto F(A);//почему-то не работает, если не почините, то удалите
-
     tree F('F', f);
     F.ERASE(3, 5);
     F.Show();
+
+//    auto F(A);//почему-то не работает, если не почините, то удалите
+
+
 
     return 0;
 }

@@ -16,8 +16,6 @@ private:
     node *fourth;  // kye[2] <= *fourth.
     node *parent; //Указатель на родителя нужен для того, потому что адрес корня может меняться при удалении
 
-    int used;
-
     bool find(int k) { // Этот метод возвращает true, если ключ k находится в вершине, иначе false.
         for (int i = 0; i < size; ++i)
             if (key[i] == k) return true;
