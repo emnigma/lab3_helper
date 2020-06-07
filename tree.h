@@ -15,7 +15,7 @@ using std::cout, std::cin, std::endl;
 class tree
 {
 private:
-    node *root;
+
     char S; //Название множества
     std::vector<int> keys;
     int n; //Мощность множества
@@ -23,6 +23,7 @@ private:
 
 
 public:
+    node *root;
     tree(); //Конструктор по уполчанию
     tree(char c, std::vector<int> &data); //конструктор дерева из вектора(не хочу вводить каждый раз ручками)
     tree(const tree&); //Конструктор копии
@@ -47,7 +48,8 @@ public:
             keys.erase(keys.begin() + index);
         }
         else {
-            remove(this->getElementByKey(keys[index]), keys[index]);
+            remove(this->getElementByKey(index), keys[index]);
+            n--;
             keys.erase(keys.begin() + index);
         }
     } //для удаления элемента из последовательности
@@ -152,6 +154,7 @@ public:
 
         item->remove_from_node(k); // И удаляем требуемый ключ из листа
         return fix(item); // Вызываем функцию для восстановления свойств дерева.
+
     } //для удаления из дерева
 
     node *fix(node *leaf) {
@@ -480,7 +483,7 @@ public:
         if (p1 < 0 || p2 > this->keys.size() || p1 > p2) {
             throw std::invalid_argument("check borders");
         }
-        for (int i = p1; i <= p2; i++) {
+        for (int i = p2; i >= p1; i--) {
             this->removeByIndex(i);
         }
     }
@@ -501,10 +504,10 @@ public:
 
         return a;
     }
-    ~tree()
-    {
-        delete root;
-    }
+//    ~tree()
+//    {
+//        delete root;
+//    }
 };
 
 
