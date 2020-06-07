@@ -77,11 +77,11 @@ private:
 
 public:
     // Создавать всегда будем вершину только с одним ключом
-    node(int k): size(1), key{k, 0, 0}, first(nullptr), second(nullptr),
+    node(int k): size(1), key{k, -1, -1}, first(nullptr), second(nullptr),
                  third(nullptr), fourth(nullptr), parent(nullptr) {}
 
     node (int k, node *first_, node *second_, node *third_, node *fourth_, node *parent_):
-            size(1), key{k, 0, 0}, first(first_), second(second_),
+            size(1), key{k, -1, -1}, first(first_), second(second_),
             third(third_), fourth(fourth_), parent(parent_) {}
 
     int* keys() {

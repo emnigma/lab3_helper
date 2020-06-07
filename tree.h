@@ -19,7 +19,7 @@ private:
     char S; //Название множества
     std::vector<int> keys;
     int n; //Мощность множества
-    static const int N;
+    static const int N; //максимальное выделяемое количество данных
 
 
 public:
@@ -368,20 +368,87 @@ public:
         return parent;
     }
 
-    void trav_show() {
-        this->traverse(root);
+    std::vector<int> get_variety() {
+        std::vector<int> elems;
+        elems.reserve(this->n);
+        traverse(root, elems);
+        return elems;
     }
 
-    void traverse(node *current) { //по текущему узлу получить следующий
+    void traverse(node *current, std::vector<int> &res) { //по текущему узлу получить следующий
         if (!current)
             return;
 
-        traverse(current->first); //Рекурсивная функция для левого поддерева
+        traverse(current->first, res); //Рекурсивная функция для левого поддерева
 
-        cout << current->key[0] << ' ';
+//        cout << current->key[0] << ' ';
+        if (!current->is_leaf())
+            res.push_back(current->key[0]);
+        else {
+            for (auto i: current->key) {
+                if (i != -1)
+                    res.push_back(i);
+            }
+        }
 
-        traverse(current->second); //Рекурсивная функция для среднего поддерева
-        traverse(current->third); //Рекурсивная функция для правого поддерева
+        traverse(current->second, res); //Рекурсивная функция для среднего поддерева
+        traverse(current->third, res); //Рекурсивная функция для правого поддерева
+    }
+
+    static tree AND (tree &a, tree &b) {
+        std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
+        std::set_intersection(
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
+                std::back_inserter(v)
+        );
+
+        return tree('&', v);
+    }
+
+    static tree MINUS (tree &a, tree &b) {
+        std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
+        std::set_difference(
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
+                std::back_inserter(v)
+        );
+
+        return tree('\\', v);
+    }
+
+    static tree XOR (tree &a, tree &b) {
+        std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
+        std::set_symmetric_difference(
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
+                std::back_inserter(v)
+        );
+
+        return tree('+', v);
+    }
+
+    static tree OR (tree &a, tree &b) {
+        std::vector<int> v;
+        auto a_elements = a.get_variety();
+        auto b_elements = b.get_variety();
+
+        std::set_union(
+                a_elements.begin(), a_elements.end(),
+                b_elements.begin(), b_elements.end(),
+                std::back_inserter(v)
+        );
+
+        return tree('|', v);
     }
 
     static tree SUBST(int pos, tree &a, tree &b) { //говнокод
@@ -486,6 +553,7 @@ void tree::Show()
         cout << ']' << endl;
         Display(root, lvl);
     }
+    cout << endl;
 }
 
 void tree::Display(node *p, int &lvl)

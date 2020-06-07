@@ -3,36 +3,69 @@
 #include "tree.h"
 #include "pointer.h"
 
+const int UNIVERSUM_SIZE = 16; //for visual debug
+
 const int tree::N = 100;
+
+std::vector<int> random_vector(int size) {
+    std::vector<int> res;
+    res.reserve(size);
+    for (int i = 0; i < size; i++) {
+        int item = rand() % UNIVERSUM_SIZE + 1;
+        while(std::find(res.begin(), res.end(), item) != res.end())
+            if (std::find(res.begin(), res.end(), item) != res.end())
+                item = rand() % UNIVERSUM_SIZE + 1;
+        res.push_back(item);
+    }
+    return res;
+}
+
 
 int main() {
 
     setlocale(LC_ALL, "Russian");
     srand(80086);
 
-    std::vector<int> f = {1, 1, 2, 2, 2, 1, 1, 1};
-    std::vector<int> s = {2, 2};
+    auto a = random_vector(5);
+    auto b = random_vector(6);
+    auto c = random_vector(7);
+    auto d = random_vector(4);
+    auto e = random_vector(3);
+    auto f = random_vector(10);
 
-    tree A('A', f);
+
+    tree A('A', a);
     A.Show();
-    tree B('B', s);
+    tree B('B', b);
     B.Show();
-
-
-    auto C = tree::SUBST(3, A, B);
+    tree C('C', c);
     C.Show();
-
-    auto D = tree::MERGE(A, B);
+    tree D('D', d);
     D.Show();
-
-    auto E = tree::EXCL(A, B);
+    tree E('E', e);
     E.Show();
 
-    tree F('F', f);
-    F.ERASE(3, 5);
-    F.Show();
 
-//    auto F(A);//почему-то не работает, если не почините, то удалите
+    tree AxorB = tree::XOR(A, B),
+         AxorBminusC = tree::MINUS(AxorB, C),
+         AxorBminusCorD = tree::OR(AxorBminusC, D),
+         AxorBminusCorDandE = tree::AND(AxorBminusCorD, E);
+
+    AxorB.Show();
+    AxorBminusC.Show();
+    AxorBminusCorD.Show();
+    AxorBminusCorDandE.Show();
+
+
+    auto subst = tree::SUBST(3, A, B);
+    subst.Show();
+
+    auto merge= tree::MERGE(A, B);
+    merge.Show();
+
+    tree erase('E', f);
+    erase.ERASE(4, 7);
+    erase.Show();
 
     return 0;
 }
