@@ -10,7 +10,9 @@
 #include <algorithm>
 #include "pointer.h"
 
-using std::cout, std::cin, std::endl;
+using std::cout;
+using std::cin;
+using std::endl;
 
 class tree
 {
@@ -125,9 +127,9 @@ public:
 
         if (p->find(k)) return p;
         else if (k < p->key[0]) return search(p->first, k);
-        else if ((p->size == 2) && (k < p->key[1]) || (p->size == 1)) return search(p->second, k);
+        else if (((p->size == 2) && (k < p->key[1])) || (p->size == 1)) return search(p->second, k);
         else if (p->size == 2) return search(p->third, k);
-        else throw std::exception();
+//        else throw std::invalid_argument("function reached ");
     }
 
     node *search_min(node *p) { // Поиск узла с минимальным элементов в 2-3-дереве с корнем p.
@@ -547,7 +549,7 @@ void tree::Show()
     else
     {
         int lvl = 0;
-        cout << S << " = [";
+        cout << S << " = [ ";
         for (auto i: keys)
             cout << i << ' ';
         cout << ']' << endl;
